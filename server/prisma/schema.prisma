@@ -1,0 +1,47 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  username  String
+  password  String
+  createdAT DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  hunches   Hunch[]
+}
+
+model Game {
+  id        String   @id @default(uuid())
+  homeTeam  String
+  createdAT DateTime @default(now())
+  awayTeam  String
+  gameTime  DateTime
+  updatedAt DateTime @updatedAt
+  hunches   Hunch[]
+
+  @@unique([homeTeam, awayTeam, gameTime])
+}
+
+model Hunch {
+  id            String   @id @default(uuid())
+  homeTeamScore Int?
+  awayTeamScore Int?
+  userId        String
+  createdAT     DateTime @default(now())
+  gameId        String
+  updatedAt     DateTime @updatedAt
+  user          User     @relation(fields: [userId], references: [id])
+  game          Game     @relation(fields: [gameId], references: [id])
+
+  @@unique([userId, gameId])
+}
