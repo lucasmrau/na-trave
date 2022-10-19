@@ -1,4 +1,4 @@
-# na-trave
+# Na Trave
 
 The application was developed to allow users to mark predictions for the 2022 World Cup games, being saved in a database, which can be consulted and changed.
 
